@@ -3,123 +3,208 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registro de Envíos - Mascotitas Felices</title>
+  <title>Mascotitas Felices - Registro de Envíos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary-color: #004d40;
-      --primary-hover: #00332c;
-      --accent-color: #26a69a;
-      --bg-color: #f0f4f3;
-      --card-bg: #ffffff;
-      --text-color: #333333;
-      --error-color: #e53935;
-      --success-color: #43a047;
+      --primary: #004d40;
+      --primary-dark: #00332c;
+      --accent: #10b981;
+      --accent-light: #e6f4f1;
+      --bg-gradient: linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 100%);
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --border-color: #cbd5e1;
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+      --radius: 16px;
     }
 
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      margin: 0;
-      padding: 20px 10px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px 15px;
     }
 
-    .container {
-      max-width: 650px;
-      margin: auto;
+    .card-wrapper {
+      width: 100%;
+      max-width: 620px;
       background: var(--card-bg);
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 40px 35px;
+      position: relative;
+      overflow: hidden;
     }
 
-    .header { text-align: center; margin-bottom: 20px; }
-    .logo-img { max-width: 130px; height: auto; margin-bottom: 10px; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    .header h1 { color: var(--primary-color); font-size: 26px; margin: 5px 0; font-weight: 700; }
+    .card-wrapper::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #004d40, #10b981);
+    }
 
-    .welcome-banner {
-      background-color: #e0f2f1;
-      border-left: 5px solid var(--accent-color);
-      padding: 12px 15px;
-      border-radius: 6px;
-      margin-bottom: 25px;
+    /* Encabezado */
+    .header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .logo-container {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+
+    .logo-img {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 10px 15px -3px rgba(0, 77, 64, 0.2);
+      border: 3px solid #ffffff;
+    }
+
+    .header h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: -0.5px;
+    }
+
+    .header p {
       font-size: 14px;
-      color: #004d40;
-      line-height: 1.4;
+      color: var(--text-muted);
+      margin-top: 4px;
     }
 
-    .form-group { margin-bottom: 18px; }
-    label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; color: #444; }
+    /* Banner */
+    .welcome-banner {
+      background: var(--accent-light);
+      border-left: 4px solid var(--accent);
+      padding: 14px 18px;
+      border-radius: 10px;
+      margin-bottom: 28px;
+      font-size: 13.5px;
+      color: #065f46;
+      line-height: 1.5;
+    }
+
+    /* Formularios */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 7px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    label span.req {
+      color: #ef4444;
+    }
 
     input, select, textarea {
       width: 100%;
-      padding: 11px 14px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      padding: 12px 16px;
+      border: 1.5px solid var(--border-color);
+      border-radius: 10px;
       font-size: 15px;
-      transition: all 0.3s ease;
-      background-color: #fafafa;
+      font-family: inherit;
+      color: var(--text-main);
+      background-color: #ffffff;
+      transition: all 0.25s ease;
     }
 
     input:focus, select:focus, textarea:focus {
       outline: none;
-      border-color: var(--accent-color);
-      background-color: #fff;
-      box-shadow: 0 0 6px rgba(38, 166, 154, 0.3);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
     }
 
-    button {
+    input[readonly] {
+      background-color: #f1f5f9;
+      color: #64748b;
+      cursor: not-allowed;
+    }
+
+    /* Botón */
+    .btn-submit {
       width: 100%;
-      padding: 14px;
-      background-color: var(--primary-color);
-      color: white;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: #ffffff;
       border: none;
-      border-radius: 6px;
+      border-radius: 10px;
       font-size: 16px;
       font-weight: 700;
       cursor: pointer;
-      transition: background 0.3s ease;
+      box-shadow: 0 10px 15px -3px rgba(0, 77, 64, 0.3);
+      transition: all 0.25s ease;
       margin-top: 10px;
     }
 
-    button:hover { background-color: var(--primary-hover); }
-    button:disabled { background-color: #b0bec5; cursor: not-allowed; }
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 20px -3px rgba(0, 77, 64, 0.4);
+    }
 
-    /* Toast Flotante */
-    #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; }
+    .btn-submit:disabled {
+      background: #94a3b8;
+      transform: none;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    /* Toast */
+    #toast-container { position: fixed; top: 24px; right: 24px; z-index: 9999; }
     .toast {
-      min-width: 260px;
+      min-width: 280px;
       padding: 14px 20px;
       margin-bottom: 10px;
-      border-radius: 8px;
+      border-radius: 12px;
       color: #fff;
       font-weight: 600;
       font-size: 14px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
       opacity: 0;
-      transform: translateY(-20px);
-      transition: all 0.3s ease;
+      transform: translateX(50px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .toast.show { opacity: 1; transform: translateY(0); }
-    .toast.warning { background-color: #f57c00; }
-    .toast.error { background-color: var(--error-color); }
+    .toast.show { opacity: 1; transform: translateX(0); }
+    .toast.warning { background-color: #f59e0b; }
+    .toast.error { background-color: #ef4444; }
 
-    /* Modal de Agradecimiento */
+    /* Modal */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: center;
-      z-index: 10000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+      background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
+      display: flex; justify-content: center; align-items: center;
+      z-index: 10000; opacity: 0; pointer-events: none; transition: all 0.3s ease;
     }
     .modal-overlay.active { opacity: 1; pointer-events: auto; }
     .modal-card {
-      background: white; padding: 30px; border-radius: 12px; text-align: center;
-      max-width: 420px; width: 90%; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      background: white; padding: 36px 30px; border-radius: 20px; text-align: center;
+      max-width: 400px; width: 90%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
     }
-    .modal-card h3 { color: var(--primary-color); font-size: 22px; margin-top: 10px; }
-    .modal-card p { color: #555; font-size: 15px; margin: 15px 0 20px 0; line-height: 1.5; }
-    .modal-btn { background-color: var(--accent-color); width: auto; padding: 10px 30px; display: inline-block; }
+    .modal-card h3 { color: var(--primary); font-size: 22px; font-weight: 800; margin-top: 10px; }
+    .modal-card p { color: var(--text-muted); font-size: 14.5px; margin: 12px 0 24px 0; line-height: 1.5; }
+    .modal-btn { background: var(--accent); color: white; padding: 12px 32px; border-radius: 10px; border: none; font-weight: 700; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -129,106 +214,99 @@
 <!-- Modal Agradecimiento -->
 <div class="modal-overlay" id="thankYouModal">
   <div class="modal-card">
-    <div style="font-size: 50px;">🐾</div>
-    <h3>¡Muchas Gracias!</h3>
-    <p>Tu información de registro ha sido guardada con éxito en nuestro sistema.</p>
-    <button class="modal-btn" onclick="cerrarModal()">Aceptar</button>
+    <div style="font-size: 48px;">🐾</div>
+    <h3>¡Registro Completado!</h3>
+    <p>Tu información ha sido enviada con éxito. Nos pondremos en contacto contigo pronto.</p>
+    <button class="modal-btn" onclick="cerrarModal()">Entendido</button>
   </div>
 </div>
 
-<div class="container">
+<div class="card-wrapper">
   <div class="header">
-    <img src="https://lh3.googleusercontent.com/d/1yfiRwqjGZ5TYr5iwaxRiKaDv-7tT7Mgp" alt="Logo Mascotitas Felices" class="logo-img">
+    <div class="logo-container">
+      <img src="https://lh3.googleusercontent.com/d/1yfiRwqjGZ5TYr5iwaxRiKaDv-7tT7Mgp" alt="Logo Mascotitas Felices" class="logo-img">
+    </div>
     <h1>Mascotitas Felices</h1>
+    <p>Plataforma Oficial de Registro de Envíos</p>
   </div>
 
   <div class="welcome-banner">
-    🐾 <strong>¡Bienvenido(a)!</strong> Por favor, completa los siguientes datos para gestionar el envío de tus pedidos de manera rápida y segura.
+    🐾 <strong>¡Bienvenido(a)!</strong> Ingresa tus datos completos para coordinar el envío o despacho de tus productos.
   </div>
 
   <form id="clientForm">
     
-    <!-- Tipo Doc -->
     <div class="form-group">
-      <label>Tipo de Documento: *</label>
+      <label>Tipo de Documento <span class="req">*</span></label>
       <select id="tipoDoc" onchange="actualizarLongitudDoc()" required>
         <option value="DNI">DNI (8 dígitos)</option>
         <option value="CE">Carnet de Extranjería (9 dígitos)</option>
       </select>
     </div>
 
-    <!-- Documento -->
     <div class="form-group">
-      <label id="labelDoc">DNI / Carnet de Extranjería: *</label>
-      <input type="text" id="documento" required maxlength="8" placeholder="Ingrese los números requeridos">
+      <label id="labelDoc">N° Documento <span class="req">*</span></label>
+      <input type="text" id="documento" required maxlength="8" placeholder="Ingrese los números de su documento">
     </div>
 
-    <!-- Celular -->
     <div class="form-group">
-      <label>N° Celular (9 dígitos): *</label>
+      <label>N° Celular <span class="req">*</span></label>
       <input type="text" id="celular" maxlength="9" required placeholder="Ejm: 987654321">
     </div>
 
-    <!-- Nombres -->
     <div class="form-group">
-      <label>Nombres y Apellidos: *</label>
-      <input type="text" id="nombres" required placeholder="Nombres y Apellidos completos">
+      <label>Nombres y Apellidos Completos <span class="req">*</span></label>
+      <input type="text" id="nombres" required placeholder="Ingrese nombres y apellidos">
     </div>
 
-    <!-- Ubigeo -->
     <div class="form-group">
-      <label>Departamento: *</label>
+      <label>Departamento <span class="req">*</span></label>
       <select id="departamento" onchange="cargarProvincias()" required>
         <option value="">Seleccione...</option>
       </select>
     </div>
 
     <div class="form-group">
-      <label>Provincia: *</label>
+      <label>Provincia <span class="req">*</span></label>
       <select id="provincia" onchange="cargarDistritos()" required>
         <option value="">Seleccione...</option>
       </select>
     </div>
 
     <div class="form-group">
-      <label>Distrito: *</label>
+      <label>Distrito <span class="req">*</span></label>
       <select id="distrito" onchange="evaluarTiposEntrega()" required>
         <option value="">Seleccione...</option>
       </select>
     </div>
 
-    <!-- Tipo de Entrega -->
     <div class="form-group">
-      <label>Tipo de Entrega: *</label>
+      <label>Tipo de Entrega <span class="req">*</span></label>
       <select id="tipoEntrega" onchange="evaluarOpcionesEntrega()" required>
         <option value="">Seleccione un distrito primero...</option>
       </select>
     </div>
 
-    <!-- Campo para Otra Agencia (Condicional) -->
     <div class="form-group" id="groupOtraAgencia" style="display:none;">
-      <label>Nombre de la Agencia: *</label>
+      <label>Nombre de la Agencia Destino <span class="req">*</span></label>
       <input type="text" id="otraAgenciaInput" placeholder="Ejm: Marvisur, Flores, Civa, etc.">
     </div>
 
-    <!-- Dirección / Sede / Ubicación -->
     <div class="form-group" id="groupSede">
-      <label id="labelSede">Sede / Dirección de Entrega: *</label>
+      <label id="labelSede">Sede / Dirección de Entrega <span class="req">*</span></label>
       <select id="sedeSelect" style="display:none;"></select>
-      <input type="text" id="direccionInput" required placeholder="Ingrese su dirección o ubicación exacta">
+      <input type="text" id="direccionInput" required placeholder="Ingrese dirección o agencia destino">
     </div>
 
-    <!-- Referencia -->
     <div class="form-group" id="groupReferencia">
-      <label id="labelReferencia">Referencia de Entrega: *</label>
-      <textarea id="referencia" rows="2" required placeholder="Puntos de referencia o indicaciones para la entrega"></textarea>
+      <label id="labelReferencia">Referencia de Entrega <span class="req">*</span></label>
+      <textarea id="referencia" rows="2" required placeholder="Puntos de referencia o indicaciones"></textarea>
     </div>
 
-    <button type="submit" id="btnSubmit">Enviar Registro</button>
+    <button type="submit" id="btnSubmit" class="btn-submit">Confirmar y Enviar Registro</button>
   </form>
 </div>
 
-<!-- Datos Ubigeo -->
 <script src="ubigeo.js"></script>
 
 <script>
@@ -238,9 +316,7 @@
   let dbShalom = [];
 
   window.onload = async () => {
-    if (dbUbigeo.length > 0) {
-      cargarDepartamentos();
-    }
+    if (dbUbigeo.length > 0) cargarDepartamentos();
 
     try {
       const resSha = await fetch(SCRIPT_URL, {
@@ -249,9 +325,7 @@
         body: JSON.stringify({ action: "getShalom" })
       });
       const dataSha = await resSha.json();
-      if (dataSha.result === "success") {
-        dbShalom = dataSha.data;
-      }
+      if (dataSha.result === "success") dbShalom = dataSha.data;
     } catch (e) {
       console.warn("No se pudieron cargar las sedes de Shalom:", e);
     }
@@ -307,21 +381,9 @@
     const selectEntrega = document.getElementById("tipoEntrega");
     selectEntrega.innerHTML = '<option value="">Seleccione...</option>';
 
-    let opcionesDisponibles = [];
-
-    if (dist === "CHIMBOTE" || dist === "NUEVO CHIMBOTE") {
-      opcionesDisponibles = [
-        "Mascotitas Felices-Recojo en Local", 
-        "Delivery"
-      ];
-    } else {
-      opcionesDisponibles = [
-        "Shalom-Recojo en Agencia",
-        "Olva Courier-Delivery",
-        "Olva Courier-Recojo en Local",
-        "Otros"
-      ];
-    }
+    let opcionesDisponibles = (dist === "CHIMBOTE" || dist === "NUEVO CHIMBOTE")
+      ? ["Mascotitas Felices-Recojo en Local", "Delivery"]
+      : ["Shalom-Recojo en Agencia", "Olva Courier-Delivery", "Olva Courier-Recojo en Local", "Otros"];
 
     opcionesDisponibles.forEach(op => selectEntrega.innerHTML += `<option value="${op}">${op}</option>`);
     evaluarOpcionesEntrega();
@@ -337,10 +399,8 @@
     const sedeSelect = document.getElementById("sedeSelect");
     const direccionInput = document.getElementById("direccionInput");
     const labelSede = document.getElementById("labelSede");
-    const groupReferencia = document.getElementById("groupReferencia");
     const referencia = document.getElementById("referencia");
 
-    // Reiniciar visibilidad
     groupOtraAgencia.style.display = "none";
     otraAgenciaInput.required = false;
     groupSede.style.display = "block";
@@ -348,33 +408,25 @@
     sedeSelect.style.display = "none";
     sedeSelect.required = false;
     direccionInput.required = true;
-    groupReferencia.style.display = "block";
     referencia.required = true;
 
-    // 1. Recojo en Local (Mascotitas Felices)
     if (entrega === "Mascotitas Felices-Recojo en Local") {
-      labelSede.innerText = "Sede de Recojo:";
+      labelSede.innerHTML = 'Sede de Recojo <span class="req">*</span>';
       direccionInput.value = "Local Principal - Mascotitas Felices";
       direccionInput.readOnly = true;
       referencia.value = "Recojo en Tienda";
       referencia.readOnly = true;
-    } 
-    // 2. Delivery
-    else if (entrega === "Delivery") {
-      labelSede.innerText = "Dirección o Ubicación exacta de Entrega: *";
+    } else if (entrega === "Delivery") {
+      labelSede.innerHTML = 'Dirección o Ubicación exacta <span class="req">*</span>';
       direccionInput.placeholder = "Solicitar dirección o ubicación exacta";
       direccionInput.value = "";
       direccionInput.readOnly = false;
-      referencia.placeholder = "Referencias de la vivienda o zona";
       referencia.value = "";
       referencia.readOnly = false;
-    }
-    // 3. Shalom Agencia
-    else if (entrega === "Shalom-Recojo en Agencia") {
-      labelSede.innerText = "Sede de Agencia (Shalom): *";
+    } else if (entrega === "Shalom-Recojo en Agencia") {
+      labelSede.innerHTML = 'Sede de Agencia (Shalom) <span class="req">*</span>';
       direccionInput.readOnly = false;
       referencia.readOnly = false;
-      
       const sedesShalom = dbShalom.filter(s => s[2] && s[2].toString().trim().toUpperCase() === dist.trim().toUpperCase());
       if (sedesShalom.length > 0) {
         sedeSelect.style.display = "block";
@@ -387,21 +439,17 @@
         direccionInput.placeholder = "Ingrese nombre de la sede Shalom";
         direccionInput.value = "";
       }
-    }
-    // 4. Olva Courier
-    else if (entrega.includes("Olva Courier")) {
-      labelSede.innerText = entrega.includes("Local") ? "Sede/Agencia Olva Courier: *" : "Dirección de Entrega Olva: *";
+    } else if (entrega.includes("Olva Courier")) {
+      labelSede.innerHTML = entrega.includes("Local") ? 'Sede/Agencia Olva Courier <span class="req">*</span>' : 'Dirección de Entrega Olva <span class="req">*</span>';
       direccionInput.placeholder = "Ingrese dirección o agencia destino";
       direccionInput.value = "";
       direccionInput.readOnly = false;
       referencia.value = "";
       referencia.readOnly = false;
-    }
-    // 5. Otros
-    else if (entrega === "Otros") {
+    } else if (entrega === "Otros") {
       groupOtraAgencia.style.display = "block";
       otraAgenciaInput.required = true;
-      labelSede.innerText = "Sede / Dirección de la Agencia Destino: *";
+      labelSede.innerHTML = 'Sede / Dirección de la Agencia Destino <span class="req">*</span>';
       direccionInput.placeholder = "Ingrese la agencia o dirección de envío";
       direccionInput.value = "";
       direccionInput.readOnly = false;
@@ -410,7 +458,6 @@
     }
   }
 
-  // Envío del Formulario
   document.getElementById("clientForm").onsubmit = async (e) => {
     e.preventDefault();
 
@@ -424,7 +471,6 @@
     const distrito = document.getElementById("distrito").value;
     const referencia = document.getElementById("referencia").value.trim();
 
-    // Validaciones Estrictas
     if (tipoDoc === "DNI" && !/^\d{8}$/.test(documento)) {
       mostrarToast("⚠️ El DNI debe tener exactamente 8 dígitos numéricos.", "warning");
       return;
@@ -440,36 +486,20 @@
       return;
     }
 
-    // Determinar la Agencia
     let agenciaFinal = "";
-    if (entrega === "Shalom-Recojo en Agencia") {
-      agenciaFinal = "SHALOM";
-    } else if (entrega.includes("Olva Courier")) {
-      agenciaFinal = "OLVA COURIER";
-    } else if (entrega === "Mascotitas Felices-Recojo en Local") {
-      agenciaFinal = "MASCOTITAS FELICES";
-    } else if (entrega === "Otros") {
-      agenciaFinal = document.getElementById("otraAgenciaInput").value.trim().toUpperCase();
-    } else {
-      agenciaFinal = "DELIVERY LOCAL";
-    }
+    if (entrega === "Shalom-Recojo en Agencia") agenciaFinal = "SHALOM";
+    else if (entrega.includes("Olva Courier")) agenciaFinal = "OLVA COURIER";
+    else if (entrega === "Mascotitas Felices-Recojo en Local") agenciaFinal = "MASCOTITAS FELICES";
+    else if (entrega === "Otros") agenciaFinal = document.getElementById("otraAgenciaInput").value.trim().toUpperCase();
+    else agenciaFinal = "DELIVERY LOCAL";
 
-    // Determinar Sede / Dirección
-    let sedeFinal = "";
-    if (entrega === "Shalom-Recojo en Agencia" && document.getElementById("sedeSelect").style.display !== "none") {
-      sedeFinal = document.getElementById("sedeSelect").value;
-    } else {
-      sedeFinal = document.getElementById("direccionInput").value.trim();
-    }
-
-    if (!sedeFinal || !referencia) {
-      mostrarToast("⚠️ Todos los campos señalados son obligatorios.", "warning");
-      return;
-    }
+    let sedeFinal = (entrega === "Shalom-Recojo en Agencia" && document.getElementById("sedeSelect").style.display !== "none")
+      ? document.getElementById("sedeSelect").value
+      : document.getElementById("direccionInput").value.trim();
 
     const btn = document.getElementById("btnSubmit");
     btn.disabled = true;
-    btn.innerText = "Guardando registro...";
+    btn.innerText = "Procesando...";
 
     const payload = {
       action: "saveClient",
@@ -499,10 +529,10 @@
       evaluarOpcionesEntrega();
 
     } catch (err) {
-      mostrarToast("Error al guardar el registro: " + err.message, "error");
+      mostrarToast("Error al guardar: " + err.message, "error");
     } finally {
       btn.disabled = false;
-      btn.innerText = "Enviar Registro";
+      btn.innerText = "Confirmar y Enviar Registro";
     }
   };
 
