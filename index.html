@@ -237,7 +237,7 @@
   let dbShalom = [];
   let urlWhatsappFinal = "";
 
-  // Normalizar cadenas para evitar fallos por tildes o espacios
+  // Limpiar texto para comparaciones sin fallos por espacios o tildes
   function normalizarTexto(str) {
     if (!str) return "";
     return str.toString()
@@ -250,22 +250,34 @@
   window.onload = async () => {
     if (dbUbigeo.length > 0) cargarDepartamentos();
 
+    // Consulta directa de Sedes Shalom
     try {
-      const resSha = await fetch(SCRIPT_URL, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify({ action: "getShalom" })
-      });
+      const resSha = await fetch(`${SCRIPT_URL}?action=getShalom`);
       const dataSha = await resSha.json();
       if (dataSha.result === "success") {
         dbShalom = dataSha.data;
-        // Si el usuario ya había seleccionado Shalom, actualizar opciones en caliente
         if (document.getElementById("tipoEntrega").value === "Shalom-Recojo en Agencia") {
           evaluarOpcionesEntrega();
         }
       }
     } catch (e) {
-      console.warn("No se pudieron cargar las sedes de Shalom:", e);
+      console.warn("Respaldo POST para sedes Shalom...");
+      try {
+        const resShaPost = await fetch(SCRIPT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "getShalom" })
+        });
+        const dataShaPost = await resShaPost.json();
+        if (dataShaPost.result === "success") {
+          dbShalom = dataShaPost.data;
+          if (document.getElementById("tipoEntrega").value === "Shalom-Recojo en Agencia") {
+            evaluarOpcionesEntrega();
+          }
+        }
+      } catch (err) {
+        console.error("Error al cargar sedes Shalom:", err);
+      }
     }
   };
 
@@ -383,7 +395,6 @@
           }
         });
       } else {
-        // En caso no haya sede registrada para ese distrito específico
         sedeSelect.style.display = "none";
         direccionInput.style.display = "block";
         direccionInput.placeholder = "Ingrese nombre de la sede Shalom";
