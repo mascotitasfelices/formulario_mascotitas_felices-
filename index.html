@@ -349,7 +349,6 @@
     }
   };
 
-  // Función para mostrar notificaciones flotantes (Toast)
   function mostrarToast(mensaje, tipo = "warning") {
     const container = document.getElementById("toast-container");
     const toast = document.createElement("div");
@@ -406,18 +405,23 @@
     const selectEntrega = document.getElementById("tipoEntrega");
     selectEntrega.innerHTML = '<option value="">Seleccione...</option>';
 
-    const opcionesBase = [
-      "Shalom-Recojo en Agencia",
-      "Olva Courier-Delivery",
-      "Olva Courier-Recojo en Local",
-      "Otros"
-    ];
+    let opcionesDisponibles = [];
 
     if (dist === "CHIMBOTE" || dist === "NUEVO CHIMBOTE") {
-      opcionesBase.push("Mascotitas Felices-Recojo en Local", "Delivery");
+      opcionesDisponibles = [
+        "Mascotitas Felices-Recojo en Local", 
+        "Delivery"
+      ];
+    } else {
+      opcionesDisponibles = [
+        "Shalom-Recojo en Agencia",
+        "Olva Courier-Delivery",
+        "Olva Courier-Recojo en Local",
+        "Otros"
+      ];
     }
 
-    opcionesBase.forEach(op => selectEntrega.innerHTML += `<option value="${op}">${op}</option>`);
+    opcionesDisponibles.forEach(op => selectEntrega.innerHTML += `<option value="${op}">${op}</option>`);
     evaluarOpcionesEntrega();
   }
 
@@ -460,7 +464,6 @@
     }
   }
 
-  // Validación y Envío
   document.getElementById("clientForm").onsubmit = async (e) => {
     e.preventDefault();
 
@@ -470,7 +473,6 @@
     const entrega = document.getElementById("tipoEntrega").value;
     const referencia = document.getElementById("referencia").value.trim();
 
-    // Validaciones Estrictas con Toast Flotante
     if (tipoDoc === "DNI" && !/^\d{8}$/.test(documento)) {
       mostrarToast("⚠️ El DNI debe contener exactamente 8 dígitos numéricos.", "warning");
       return;
@@ -522,7 +524,6 @@
         body: JSON.stringify(payload)
       });
 
-      // Mostrar emergente de agradecimiento
       document.getElementById("thankYouModal").classList.add("active");
       document.getElementById("clientForm").reset();
       evaluarOpcionesEntrega();
