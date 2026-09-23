@@ -220,7 +220,6 @@
       <input type="text" id="direccionInput" required placeholder="Ingrese dirección o agencia destino">
     </div>
 
-    <!-- REFERENCIA DE ENTREGA (OPCIONAL) -->
     <div class="form-group" id="groupReferencia">
       <label id="labelReferencia">Referencia de Entrega (Opcional)</label>
       <textarea id="referencia" rows="2" placeholder="Puntos de referencia o indicaciones adicionales"></textarea>
@@ -333,8 +332,6 @@
     sedeSelect.style.display = "none";
     sedeSelect.required = false;
     direccionInput.required = true;
-
-    // La referencia es opcional siempre
     referencia.required = false;
 
     if (entrega === "Mascotitas Felices-Recojo en Local") {
@@ -462,19 +459,23 @@
     };
 
     try {
-      await fetch(SCRIPT_URL, {
+      fetch(SCRIPT_URL, {
         method: "POST",
+        mode: "no-cors",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify(payload)
       });
 
-      document.getElementById("thankYouModal").classList.add("active");
-      document.getElementById("clientForm").reset();
-      evaluarOpcionesEntrega();
+      setTimeout(() => {
+        document.getElementById("thankYouModal").classList.add("active");
+        document.getElementById("clientForm").reset();
+        evaluarOpcionesEntrega();
+        btn.disabled = false;
+        btn.innerText = "Confirmar y Enviar Registro";
+      }, 800);
 
     } catch (err) {
-      mostrarToast("Error al guardar: " + err.message, "error");
-    } finally {
+      mostrarToast("Error de conexión: " + err.message, "error");
       btn.disabled = false;
       btn.innerText = "Confirmar y Enviar Registro";
     }
