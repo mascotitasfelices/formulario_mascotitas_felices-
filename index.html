@@ -54,41 +54,16 @@
       background: linear-gradient(90deg, #004d40, #10b981);
     }
 
-    /* Encabezado */
-    .header {
-      text-align: center;
-      margin-bottom: 28px;
-    }
-
-    .logo-container {
-      position: relative;
-      display: inline-block;
-      margin-bottom: 12px;
-    }
-
+    .header { text-align: center; margin-bottom: 28px; }
+    .logo-container { position: relative; display: inline-block; margin-bottom: 12px; }
     .logo-img {
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      object-fit: cover;
-      box-shadow: 0 10px 15px -3px rgba(0, 77, 64, 0.2);
-      border: 3px solid #ffffff;
+      width: 110px; height: 110px; border-radius: 50%; object-fit: cover;
+      box-shadow: 0 10px 15px -3px rgba(0, 77, 64, 0.2); border: 3px solid #ffffff;
     }
 
-    .header h1 {
-      font-size: 26px;
-      font-weight: 800;
-      color: var(--primary);
-      letter-spacing: -0.5px;
-    }
+    .header h1 { font-size: 26px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; }
+    .header p { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
 
-    .header p {
-      font-size: 14px;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-
-    /* Banner */
     .welcome-banner {
       background: var(--accent-light);
       border-left: 4px solid var(--accent);
@@ -100,91 +75,37 @@
       line-height: 1.5;
     }
 
-    /* Formularios */
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-main);
-      margin-bottom: 7px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    label span.req {
-      color: #ef4444;
-    }
+    .form-group { margin-bottom: 20px; }
+    label { display: block; font-size: 13px; font-weight: 700; color: var(--text-main); margin-bottom: 7px; text-transform: uppercase; letter-spacing: 0.5px; }
+    label span.req { color: #ef4444; }
 
     input, select, textarea {
-      width: 100%;
-      padding: 12px 16px;
-      border: 1.5px solid var(--border-color);
-      border-radius: 10px;
-      font-size: 15px;
-      font-family: inherit;
-      color: var(--text-main);
-      background-color: #ffffff;
-      transition: all 0.25s ease;
+      width: 100%; padding: 12px 16px; border: 1.5px solid var(--border-color);
+      border-radius: 10px; font-size: 15px; font-family: inherit; color: var(--text-main);
+      background-color: #ffffff; transition: all 0.25s ease;
     }
 
     input:focus, select:focus, textarea:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+      outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
     }
 
-    input[readonly] {
-      background-color: #f1f5f9;
-      color: #64748b;
-      cursor: not-allowed;
-    }
+    input[readonly] { background-color: #f1f5f9; color: #64748b; cursor: not-allowed; }
 
-    /* Botón */
     .btn-submit {
-      width: 100%;
-      padding: 16px;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-      color: #ffffff;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 10px 15px -3px rgba(0, 77, 64, 0.3);
-      transition: all 0.25s ease;
-      margin-top: 10px;
+      width: 100%; padding: 16px; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: #ffffff; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer;
+      box-shadow: 0 10px 15px -3px rgba(0, 77, 64, 0.3); transition: all 0.25s ease; margin-top: 10px;
     }
 
-    .btn-submit:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 20px -3px rgba(0, 77, 64, 0.4);
-    }
-
-    .btn-submit:disabled {
-      background: #94a3b8;
-      transform: none;
-      box-shadow: none;
-      cursor: not-allowed;
-    }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 12px 20px -3px rgba(0, 77, 64, 0.4); }
+    .btn-submit:disabled { background: #94a3b8; transform: none; box-shadow: none; cursor: not-allowed; }
 
     /* Toast */
     #toast-container { position: fixed; top: 24px; right: 24px; z-index: 9999; }
     .toast {
-      min-width: 280px;
-      padding: 14px 20px;
-      margin-bottom: 10px;
-      border-radius: 12px;
-      color: #fff;
-      font-weight: 600;
-      font-size: 14px;
-      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-      opacity: 0;
-      transform: translateX(50px);
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      min-width: 280px; padding: 14px 20px; margin-bottom: 10px; border-radius: 12px; color: #fff;
+      font-weight: 600; font-size: 14px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); opacity: 0;
+      transform: translateX(50px); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .toast.show { opacity: 1; transform: translateX(0); }
     .toast.warning { background-color: #f59e0b; }
@@ -204,20 +125,21 @@
     }
     .modal-card h3 { color: var(--primary); font-size: 22px; font-weight: 800; margin-top: 10px; }
     .modal-card p { color: var(--text-muted); font-size: 14.5px; margin: 12px 0 24px 0; line-height: 1.5; }
-    .modal-btn { background: var(--accent); color: white; padding: 12px 32px; border-radius: 10px; border: none; font-weight: 700; cursor: pointer; }
+    .modal-btn { background: #25d366; color: white; padding: 12px 28px; border-radius: 10px; border: none; font-weight: 700; cursor: pointer; font-size: 15px; }
+    .modal-btn:hover { background: #1eb855; }
   </style>
 </head>
 <body>
 
 <div id="toast-container"></div>
 
-<!-- Modal Agradecimiento -->
+<!-- Modal Agradecimiento y Redirección a WhatsApp -->
 <div class="modal-overlay" id="thankYouModal">
   <div class="modal-card">
     <div style="font-size: 48px;">🐾</div>
     <h3>¡Registro Completado!</h3>
-    <p>Tu información ha sido enviada con éxito. Nos pondremos en contacto contigo pronto.</p>
-    <button class="modal-btn" onclick="cerrarModal()">Entendido</button>
+    <p>Tu información ha sido registrada exitosamente. Haz clic en el botón para enviar los detalles por WhatsApp.</p>
+    <button class="modal-btn" id="btnWhatsapp" onclick="abrirWhatsapp()">📱 Enviar por WhatsApp</button>
   </div>
 </div>
 
@@ -311,9 +233,11 @@
 
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzgRnI7f7S6mrx2DrDzJeb47h1_hurDHlasjluuqLIhJB-EazDwJcidQSPq0sa0Ip2j/exec"; 
+  const PHONE_WHATSAPP = "51973376798"; // Número de destino de WhatsApp
 
   let dbUbigeo = typeof DATA_UBIGEO !== 'undefined' ? DATA_UBIGEO : [];
   let dbShalom = [];
+  let urlWhatsappFinal = "";
 
   window.onload = async () => {
     if (dbUbigeo.length > 0) cargarDepartamentos();
@@ -497,6 +421,24 @@
       ? document.getElementById("sedeSelect").value
       : document.getElementById("direccionInput").value.trim();
 
+    // Construir mensaje estructurado para WhatsApp
+    const mensajeWS = 
+      `🐾 *NUEVO REGISTRO DE ENVÍO - MASCOTITAS FELICES* 🐾\n\n` +
+      `👤 *Cliente:* ${nombres}\n` +
+      `🪪 *${tipoDoc}:* ${documento}\n` +
+      `📱 *Celular:* ${celular}\n\n` +
+      `📍 *DESTINO:*\n` +
+      `• *Departamento:* ${departamento}\n` +
+      `• *Provincia:* ${provincia}\n` +
+      `• *Distrito:* ${distrito}\n\n` +
+      `🚚 *DETALLES DE ENTREGA:*\n` +
+      `• *Tipo de Entrega:* ${entrega}\n` +
+      `• *Agencia:* ${agenciaFinal}\n` +
+      `• *Sede / Dirección:* ${sedeFinal}\n` +
+      `• *Referencia:* ${referencia}`;
+
+    urlWhatsappFinal = `https://api.whatsapp.com/send?phone=${PHONE_WHATSAPP}&text=${encodeURIComponent(mensajeWS)}`;
+
     const btn = document.getElementById("btnSubmit");
     btn.disabled = true;
     btn.innerText = "Procesando...";
@@ -524,6 +466,7 @@
         body: JSON.stringify(payload)
       });
 
+      // Mostrar modal
       document.getElementById("thankYouModal").classList.add("active");
       document.getElementById("clientForm").reset();
       evaluarOpcionesEntrega();
@@ -535,6 +478,13 @@
       btn.innerText = "Confirmar y Enviar Registro";
     }
   };
+
+  function abrirWhatsapp() {
+    if (urlWhatsappFinal) {
+      window.open(urlWhatsappFinal, "_blank");
+    }
+    cerrarModal();
+  }
 
   function cerrarModal() {
     document.getElementById("thankYouModal").classList.remove("active");
