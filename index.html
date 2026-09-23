@@ -100,7 +100,6 @@
     .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 12px 20px -3px rgba(0, 77, 64, 0.4); }
     .btn-submit:disabled { background: #94a3b8; transform: none; box-shadow: none; cursor: not-allowed; }
 
-    /* Toast */
     #toast-container { position: fixed; top: 24px; right: 24px; z-index: 9999; }
     .toast {
       min-width: 280px; padding: 14px 20px; margin-bottom: 10px; border-radius: 12px; color: #fff;
@@ -111,7 +110,6 @@
     .toast.warning { background-color: #f59e0b; }
     .toast.error { background-color: #ef4444; }
 
-    /* Modal */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
@@ -239,6 +237,16 @@
   let dbShalom = [];
   let urlWhatsappFinal = "";
 
+  // Normalizar cadenas para evitar fallos por tildes o espacios
+  function normalizarTexto(str) {
+    if (!str) return "";
+    return str.toString()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim()
+      .toUpperCase();
+  }
+
   window.onload = async () => {
     if (dbUbigeo.length > 0) cargarDepartamentos();
 
@@ -249,7 +257,13 @@
         body: JSON.stringify({ action: "getShalom" })
       });
       const dataSha = await resSha.json();
-      if (dataSha.result === "success") dbShalom = dataSha.data;
+      if (dataSha.result === "success") {
+        dbShalom = dataSha.data;
+        // Si el usuario ya había seleccionado Shalom, actualizar opciones en caliente
+        if (document.getElementById("tipoEntrega").value === "Shalom-Recojo en Agencia") {
+          evaluarOpcionesEntrega();
+        }
+      }
     } catch (e) {
       console.warn("No se pudieron cargar las sedes de Shalom:", e);
     }
@@ -301,7 +315,7 @@
   }
 
   function evaluarTiposEntrega() {
-    const dist = document.getElementById("distrito").value.toUpperCase();
+    const dist = normalizarTexto(document.getElementById("distrito").value);
     const selectEntrega = document.getElementById("tipoEntrega");
     selectEntrega.innerHTML = '<option value="">Seleccione...</option>';
 
@@ -315,7 +329,7 @@
 
   function evaluarOpcionesEntrega() {
     const entrega = document.getElementById("tipoEntrega").value;
-    const dist = document.getElementById("distrito").value;
+    const distSeleccionado = normalizarTexto(document.getElementById("distrito").value);
     
     const groupOtraAgencia = document.getElementById("groupOtraAgencia");
     const otraAgenciaInput = document.getElementById("otraAgenciaInput");
@@ -351,15 +365,27 @@
       labelSede.innerHTML = 'Sede de Agencia (Shalom) <span class="req">*</span>';
       direccionInput.readOnly = false;
       referencia.readOnly = false;
-      const sedesShalom = dbShalom.filter(s => s[2] && s[2].toString().trim().toUpperCase() === dist.trim().toUpperCase());
+
+      // Filtrar Sedes Shalom por Distrito (Columna C de la hoja, índice 2)
+      const sedesShalom = dbShalom.filter(s => s[2] && normalizarTexto(s[2]) === distSeleccionado);
+
       if (sedesShalom.length > 0) {
         sedeSelect.style.display = "block";
         direccionInput.style.display = "none";
         sedeSelect.required = true;
         direccionInput.required = false;
+        
         sedeSelect.innerHTML = '<option value="">Seleccione Sede Shalom...</option>';
-        sedesShalom.forEach(s => sedeSelect.innerHTML += `<option value="${s[3]}">${s[3]}</option>`);
+        sedesShalom.forEach(s => {
+          const nombreSede = s[3] ? s[3].toString().trim() : "";
+          if (nombreSede) {
+            sedeSelect.innerHTML += `<option value="${nombreSede}">${nombreSede}</option>`;
+          }
+        });
       } else {
+        // En caso no haya sede registrada para ese distrito específico
+        sedeSelect.style.display = "none";
+        direccionInput.style.display = "block";
         direccionInput.placeholder = "Ingrese nombre de la sede Shalom";
         direccionInput.value = "";
       }
