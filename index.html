@@ -133,7 +133,7 @@
 
 <div id="toast-container"></div>
 
-<!-- Modal Agradecimiento y Redirección a WhatsApp -->
+<!-- Modal Agradecimiento -->
 <div class="modal-overlay" id="thankYouModal">
   <div class="modal-card">
     <div style="font-size: 48px;">🐾</div>
@@ -220,9 +220,10 @@
       <input type="text" id="direccionInput" required placeholder="Ingrese dirección o agencia destino">
     </div>
 
+    <!-- REFERENCIA DE ENTREGA (OPCIONAL) -->
     <div class="form-group" id="groupReferencia">
-      <label id="labelReferencia">Referencia de Entrega <span class="req">*</span></label>
-      <textarea id="referencia" rows="2" required placeholder="Puntos de referencia o indicaciones"></textarea>
+      <label id="labelReferencia">Referencia de Entrega (Opcional)</label>
+      <textarea id="referencia" rows="2" placeholder="Puntos de referencia o indicaciones adicionales"></textarea>
     </div>
 
     <button type="submit" id="btnSubmit" class="btn-submit">Confirmar y Enviar Registro</button>
@@ -233,7 +234,7 @@
 
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzgRnI7f7S6mrx2DrDzJeb47h1_hurDHlasjluuqLIhJB-EazDwJcidQSPq0sa0Ip2j/exec"; 
-  const PHONE_WHATSAPP = "51973376798"; // Número de destino de WhatsApp
+  const PHONE_WHATSAPP = "51973376798";
 
   let dbUbigeo = typeof DATA_UBIGEO !== 'undefined' ? DATA_UBIGEO : [];
   let dbShalom = [];
@@ -332,7 +333,9 @@
     sedeSelect.style.display = "none";
     sedeSelect.required = false;
     direccionInput.required = true;
-    referencia.required = true;
+
+    // La referencia es opcional siempre
+    referencia.required = false;
 
     if (entrega === "Mascotitas Felices-Recojo en Local") {
       labelSede.innerHTML = 'Sede de Recojo <span class="req">*</span>';
@@ -421,7 +424,6 @@
       ? document.getElementById("sedeSelect").value
       : document.getElementById("direccionInput").value.trim();
 
-    // Construir mensaje estructurado para WhatsApp
     const mensajeWS = 
       `🐾 *NUEVO REGISTRO DE ENVÍO - MASCOTITAS FELICES* 🐾\n\n` +
       `👤 *Cliente:* ${nombres}\n` +
@@ -434,8 +436,8 @@
       `🚚 *DETALLES DE ENTREGA:*\n` +
       `• *Tipo de Entrega:* ${entrega}\n` +
       `• *Agencia:* ${agenciaFinal}\n` +
-      `• *Sede / Dirección:* ${sedeFinal}\n` +
-      `• *Referencia:* ${referencia}`;
+      `• *Sede / Dirección:* ${sedeFinal}` +
+      (referencia ? `\n• *Referencia:* ${referencia}` : '');
 
     urlWhatsappFinal = `https://api.whatsapp.com/send?phone=${PHONE_WHATSAPP}&text=${encodeURIComponent(mensajeWS)}`;
 
@@ -466,7 +468,6 @@
         body: JSON.stringify(payload)
       });
 
-      // Mostrar modal
       document.getElementById("thankYouModal").classList.add("active");
       document.getElementById("clientForm").reset();
       evaluarOpcionesEntrega();
