@@ -3,23 +3,240 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registro de Clientes</title>
+  <title>Registro de Envíos - Mascotitas Felices</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f9; }
-    .container { max-width: 600px; margin: auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    h2 { text-align: center; color: #004d40; margin-bottom: 20px; }
-    .form-group { margin-bottom: 15px; }
-    label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; }
-    input, select, textarea { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
-    button { width: 100%; padding: 12px; background-color: #004d40; color: white; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.3s; }
-    button:hover { background-color: #00332c; }
-    button:disabled { background-color: #ccc; cursor: not-allowed; }
+    :root {
+      --primary-color: #004d40;
+      --primary-hover: #00332c;
+      --accent-color: #26a69a;
+      --bg-color: #f0f4f3;
+      --card-bg: #ffffff;
+      --text-color: #333333;
+      --error-color: #e53935;
+      --success-color: #43a047;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 20px 10px;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: auto;
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Encabezado y Logo */
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .logo-img {
+      max-width: 140px;
+      height: auto;
+      margin-bottom: 10px;
+      border-radius: 50%;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .header h1 {
+      color: var(--primary-color);
+      font-size: 26px;
+      margin: 5px 0;
+      font-weight: 700;
+    }
+
+    /* Mensaje de Bienvenida */
+    .welcome-banner {
+      background-color: #e0f2f1;
+      border-left: 5px solid var(--accent-color);
+      padding: 12px 15px;
+      border-radius: 6px;
+      margin-bottom: 25px;
+      font-size: 14px;
+      color: #004d40;
+      line-height: 1.4;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      font-size: 14px;
+      color: #444;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      background-color: #fafafa;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      background-color: #fff;
+      box-shadow: 0 0 6px rgba(38, 166, 154, 0.3);
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.1s ease;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: var(--primary-hover);
+    }
+
+    button:active {
+      transform: scale(0.99);
+    }
+
+    button:disabled {
+      background-color: #b0bec5;
+      cursor: not-allowed;
+    }
+
+    /* Contenedor de Notificaciones Flotantes (Toast) */
+    #toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+    }
+
+    .toast {
+      min-width: 250px;
+      padding: 14px 20px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 0.3s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast.warning { background-color: #f57c00; }
+    .toast.error { background-color: var(--error-color); }
+    .toast.success { background-color: var(--success-color); }
+
+    /* Modal de Agradecimiento */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 420px;
+      width: 90%;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    .modal-card h3 {
+      color: var(--primary-color);
+      margin-top: 10px;
+      font-size: 22px;
+    }
+
+    .modal-card p {
+      color: #555;
+      font-size: 15px;
+      line-height: 1.5;
+      margin: 15px 0 20px 0;
+    }
+
+    .modal-btn {
+      background-color: var(--accent-color);
+      width: auto;
+      padding: 10px 30px;
+      display: inline-block;
+    }
+
+    .modal-btn:hover {
+      background-color: #00796b;
+    }
   </style>
 </head>
 <body>
 
+<!-- Notificaciones Flotantes -->
+<div id="toast-container"></div>
+
+<!-- Modal de Agradecimiento -->
+<div class="modal-overlay" id="thankYouModal">
+  <div class="modal-card">
+    <div style="font-size: 50px;">🐾</div>
+    <h3>¡Muchas Gracias!</h3>
+    <p>Tu información de registro ha sido guardada con éxito en nuestro sistema. Nos pondremos en contacto contigo pronto.</p>
+    <button class="modal-btn" onclick="cerrarModal()">Aceptar</button>
+  </div>
+</div>
+
 <div class="container">
-  <h2>Formulario de Registro de Clientes</h2>
+  <div class="header">
+    <img src="https://lh3.googleusercontent.com/d/1yfiRwqjGZ5TYr5iwaxRiKaDv-7tT7Mgp" alt="Logo Mascotitas Felices" class="logo-img">
+    <h1>Mascotitas Felices</h1>
+  </div>
+
+  <div class="welcome-banner">
+    🐾 <strong>¡Bienvenido(a)!</strong> Por favor, completa los siguientes datos para gestionar el envío de tus pedidos de manera rápida y segura.
+  </div>
+
   <form id="clientForm">
     
     <!-- Tipo de Documento -->
@@ -31,22 +248,22 @@
       </select>
     </div>
 
-    <!-- DNI / CE -->
+    <!-- Documento -->
     <div class="form-group">
       <label id="labelDoc">DNI / Carnet de Extranjería:</label>
-      <input type="text" id="documento" required maxlength="8" pattern="\d{8}" title="Debe ingresar exactamente la cantidad de números requerida">
+      <input type="text" id="documento" required maxlength="8" placeholder="Ingrese los números requeridos">
     </div>
 
     <!-- Celular -->
     <div class="form-group">
       <label>N° Celular (9 dígitos):</label>
-      <input type="text" id="celular" maxlength="9" pattern="\d{9}" required title="Debe ingresar exactamente 9 dígitos numéricos">
+      <input type="text" id="celular" maxlength="9" required placeholder="Ejm: 987654321">
     </div>
 
     <!-- Nombres y Apellidos -->
     <div class="form-group">
       <label>Nombres y Apellidos:</label>
-      <input type="text" id="nombres" required placeholder="Ingrese sus nombres y apellidos completos">
+      <input type="text" id="nombres" required placeholder="Nombres y Apellidos completos">
     </div>
 
     <!-- Ubigeo -->
@@ -100,25 +317,23 @@
   </form>
 </div>
 
-<!-- Carga del archivo local de datos de Ubigeo -->
+<!-- Datos de Ubigeo locales -->
 <script src="ubigeo.js"></script>
 
 <script>
-  // ⚠️ REEMPLAZA ESTA CONSTANTE CON TU URL DE APPS SCRIPT
+  // ⚠️ ASEGÚRATE DE MANTENER AQUÍ TU URL DE GOOGLE APPS SCRIPT
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzgRnI7f7S6mrx2DrDzJeb47h1_hurDHlasjluuqLIhJB-EazDwJcidQSPq0sa0Ip2j/exec"; 
 
   let dbUbigeo = typeof DATA_UBIGEO !== 'undefined' ? DATA_UBIGEO : [];
   let dbShalom = [];
 
   window.onload = async () => {
-    // 1. Carga INMEDIATA de los departamentos (0ms de espera)
     if (dbUbigeo.length > 0) {
       cargarDepartamentos();
     } else {
-      console.error("El archivo 'ubigeo.js' no fue encontrado o está vacío.");
+      mostrarToast("No se pudo cargar el archivo local de ubigeo.js", "error");
     }
 
-    // 2. Carga en segundo plano de las Sedes Shalom
     try {
       const resSha = await fetch(SCRIPT_URL, {
         method: "POST",
@@ -130,19 +345,33 @@
         dbShalom = dataSha.data;
       }
     } catch (e) {
-      console.warn("No se pudieron consultar las sedes Shalom en segundo plano:", e);
+      console.warn("No se pudieron cargar las sedes de Shalom:", e);
     }
   };
+
+  // Función para mostrar notificaciones flotantes (Toast)
+  function mostrarToast(mensaje, tipo = "warning") {
+    const container = document.getElementById("toast-container");
+    const toast = document.createElement("div");
+    toast.className = `toast ${tipo}`;
+    toast.innerText = mensaje;
+    
+    container.appendChild(toast);
+    
+    setTimeout(() => toast.classList.add("show"), 100);
+    setTimeout(() => {
+      toast.classList.remove("show");
+      setTimeout(() => toast.remove(), 300);
+    }, 3500);
+  }
 
   function actualizarLongitudDoc() {
     const tipo = document.getElementById("tipoDoc").value;
     const input = document.getElementById("documento");
     if (tipo === "DNI") {
       input.maxLength = 8;
-      input.pattern = "\\d{8}";
     } else {
       input.maxLength = 9;
-      input.pattern = "\\d{9}";
     }
     input.value = "";
   }
@@ -201,7 +430,6 @@
     const direccionInput = document.getElementById("direccionInput");
     const labelSede = document.getElementById("labelSede");
 
-    // Lógica Shalom
     if (entrega === "Shalom-Recojo en Agencia") {
       groupAgencia.style.display = "block";
       labelSede.innerText = "Sede de Agencia (Shalom):";
@@ -225,24 +453,48 @@
       labelSede.innerText = "Sede / Dirección de Entrega:";
     }
 
-    // Lógica Referencia (OBLIGATORIO si es Delivery)
     if (entrega.toLowerCase().includes("delivery")) {
       groupReferencia.style.display = "block";
-      document.getElementById("referencia").required = true;
     } else {
       groupReferencia.style.display = "none";
-      document.getElementById("referencia").required = false;
     }
   }
 
-  // Enviar el Registro
+  // Validación y Envío
   document.getElementById("clientForm").onsubmit = async (e) => {
     e.preventDefault();
+
+    const tipoDoc = document.getElementById("tipoDoc").value;
+    const documento = document.getElementById("documento").value.trim();
+    const celular = document.getElementById("celular").value.trim();
+    const entrega = document.getElementById("tipoEntrega").value;
+    const referencia = document.getElementById("referencia").value.trim();
+
+    // Validaciones Estrictas con Toast Flotante
+    if (tipoDoc === "DNI" && !/^\d{8}$/.test(documento)) {
+      mostrarToast("⚠️ El DNI debe contener exactamente 8 dígitos numéricos.", "warning");
+      return;
+    }
+
+    if (tipoDoc === "CE" && !/^\d{9}$/.test(documento)) {
+      mostrarToast("⚠️ El Carnet de Extranjería debe contener exactamente 9 dígitos numéricos.", "warning");
+      return;
+    }
+
+    if (!/^\d{9}$/.test(celular)) {
+      mostrarToast("⚠️ El celular debe contener exactamente 9 dígitos numéricos.", "warning");
+      return;
+    }
+
+    if (entrega.toLowerCase().includes("delivery") && referencia === "") {
+      mostrarToast("⚠️ La referencia es obligatoria para la opción de Delivery.", "warning");
+      return;
+    }
+
     const btn = document.getElementById("btnSubmit");
     btn.disabled = true;
-    btn.innerText = "Guardando...";
+    btn.innerText = "Guardando registro...";
 
-    const entrega = document.getElementById("tipoEntrega").value;
     const sedeFinal = (entrega === "Shalom-Recojo en Agencia" && document.getElementById("sedeSelect").style.display !== "none")
       ? document.getElementById("sedeSelect").value
       : document.getElementById("direccionInput").value;
@@ -250,8 +502,8 @@
     const payload = {
       action: "saveClient",
       data: {
-        documento: document.getElementById("documento").value,
-        celular: document.getElementById("celular").value,
+        documento: documento,
+        celular: celular,
         nombres: document.getElementById("nombres").value,
         departamento: document.getElementById("departamento").value,
         provincia: document.getElementById("provincia").value,
@@ -259,7 +511,7 @@
         tipoEntrega: entrega,
         agencia: entrega === "Shalom-Recojo en Agencia" ? "SHALOM" : "",
         sedeDireccion: sedeFinal,
-        referencia: document.getElementById("referencia").value
+        referencia: referencia
       }
     };
 
@@ -269,15 +521,23 @@
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify(payload)
       });
-      alert("¡Registro guardado con éxito!");
+
+      // Mostrar emergente de agradecimiento
+      document.getElementById("thankYouModal").classList.add("active");
       document.getElementById("clientForm").reset();
+      evaluarOpcionesEntrega();
+
     } catch (err) {
-      alert("Error al guardar: " + err.message);
+      mostrarToast("Error al guardar el registro: " + err.message, "error");
     } finally {
       btn.disabled = false;
       btn.innerText = "Enviar Registro";
     }
   };
+
+  function cerrarModal() {
+    document.getElementById("thankYouModal").classList.remove("active");
+  }
 </script>
 </body>
 </html>
