@@ -7,21 +7,22 @@
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f9; }
     .container { max-width: 600px; margin: auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    h2 { text-align: center; color: #333; }
+    h2 { text-align: center; color: #004d40; margin-bottom: 20px; }
     .form-group { margin-bottom: 15px; }
-    label { display: block; margin-bottom: 5px; font-weight: bold; }
-    input, select, textarea { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
-    button { width: 100%; padding: 10px; background-color: #004d40; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
-    button:disabled { background-color: #ccc; }
+    label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; }
+    input, select, textarea { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+    button { width: 100%; padding: 12px; background-color: #004d40; color: white; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.3s; }
+    button:hover { background-color: #00332c; }
+    button:disabled { background-color: #ccc; cursor: not-allowed; }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <h2>Formulario de Registro</h2>
+  <h2>Formulario de Registro de Clientes</h2>
   <form id="clientForm">
     
-    <!-- Tipo de Documento y Validación -->
+    <!-- Tipo de Documento -->
     <div class="form-group">
       <label>Tipo de Documento:</label>
       <select id="tipoDoc" onchange="actualizarLongitudDoc()">
@@ -30,35 +31,44 @@
       </select>
     </div>
 
+    <!-- DNI / CE -->
     <div class="form-group">
       <label id="labelDoc">DNI / Carnet de Extranjería:</label>
-      <input type="text" id="documento" required maxlength="8" pattern="\d{8}" title="Debe ingresar exactamente la cantidad de números requeridos">
+      <input type="text" id="documento" required maxlength="8" pattern="\d{8}" title="Debe ingresar exactamente la cantidad de números requerida">
     </div>
 
+    <!-- Celular -->
     <div class="form-group">
       <label>N° Celular (9 dígitos):</label>
-      <input type="text" id="celular" maxlength="9" pattern="\d{9}" required title="Debe ingresar exactamente 9 dígitos numericos">
+      <input type="text" id="celular" maxlength="9" pattern="\d{9}" required title="Debe ingresar exactamente 9 dígitos numéricos">
     </div>
 
+    <!-- Nombres y Apellidos -->
     <div class="form-group">
       <label>Nombres y Apellidos:</label>
-      <input type="text" id="nombres" required>
+      <input type="text" id="nombres" required placeholder="Ingrese sus nombres y apellidos completos">
     </div>
 
     <!-- Ubigeo -->
     <div class="form-group">
       <label>Departamento:</label>
-      <select id="departamento" onchange="cargarProvincias()" required><option value="">Seleccione...</option></select>
+      <select id="departamento" onchange="cargarProvincias()" required>
+        <option value="">Seleccione...</option>
+      </select>
     </div>
 
     <div class="form-group">
       <label>Provincia:</label>
-      <select id="provincia" onchange="cargarDistritos()" required><option value="">Seleccione...</option></select>
+      <select id="provincia" onchange="cargarDistritos()" required>
+        <option value="">Seleccione...</option>
+      </select>
     </div>
 
     <div class="form-group">
       <label>Distrito:</label>
-      <select id="distrito" onchange="evaluarTiposEntrega()" required><option value="">Seleccione...</option></select>
+      <select id="distrito" onchange="evaluarTiposEntrega()" required>
+        <option value="">Seleccione...</option>
+      </select>
     </div>
 
     <!-- Tipo de Entrega -->
@@ -83,28 +93,45 @@
 
     <div class="form-group" id="groupReferencia" style="display:none;">
       <label>Referencia:</label>
-      <textarea id="referencia" rows="2"></textarea>
+      <textarea id="referencia" rows="2" placeholder="Puntos de referencia para la entrega"></textarea>
     </div>
 
     <button type="submit" id="btnSubmit">Enviar Registro</button>
   </form>
 </div>
 
+<!-- Carga del archivo local de datos de Ubigeo -->
+<script src="ubigeo.js"></script>
+
 <script>
-  // Reemplaza con tu URL de Apps Script desplegado
+  // ⚠️ REEMPLAZA ESTA CONSTANTE CON TU URL DE APPS SCRIPT
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzgRnI7f7S6mrx2DrDzJeb47h1_hurDHlasjluuqLIhJB-EazDwJcidQSPq0sa0Ip2j/exec"; 
 
-  let dbUbigeo = [];
+  let dbUbigeo = typeof DATA_UBIGEO !== 'undefined' ? DATA_UBIGEO : [];
   let dbShalom = [];
 
   window.onload = async () => {
-    const resUbi = await fetch(`${SCRIPT_URL}?action=getUbigeo`);
-    dbUbigeo = await resUbi.json();
+    // 1. Carga INMEDIATA de los departamentos (0ms de espera)
+    if (dbUbigeo.length > 0) {
+      cargarDepartamentos();
+    } else {
+      console.error("El archivo 'ubigeo.js' no fue encontrado o está vacío.");
+    }
 
-    const resSha = await fetch(`${SCRIPT_URL}?action=getShalom`);
-    dbShalom = await resSha.json();
-
-    cargarDepartamentos();
+    // 2. Carga en segundo plano de las Sedes Shalom
+    try {
+      const resSha = await fetch(SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action: "getShalom" })
+      });
+      const dataSha = await resSha.json();
+      if (dataSha.result === "success") {
+        dbShalom = dataSha.data;
+      }
+    } catch (e) {
+      console.warn("No se pudieron consultar las sedes Shalom en segundo plano:", e);
+    }
   };
 
   function actualizarLongitudDoc() {
@@ -121,7 +148,7 @@
   }
 
   function cargarDepartamentos() {
-    const deps = [...new Set(dbUbigeo.map(item => item[0]))].sort();
+    const deps = [...new Set(dbUbigeo.map(item => item[0]))].filter(Boolean).sort();
     const select = document.getElementById("departamento");
     select.innerHTML = '<option value="">Seleccione...</option>';
     deps.forEach(d => select.innerHTML += `<option value="${d}">${d}</option>`);
@@ -129,7 +156,7 @@
 
   function cargarProvincias() {
     const dep = document.getElementById("departamento").value;
-    const provs = [...new Set(dbUbigeo.filter(i => i[0] === dep).map(i => i[1]))].sort();
+    const provs = [...new Set(dbUbigeo.filter(i => i[0] === dep).map(i => i[1]))].filter(Boolean).sort();
     const select = document.getElementById("provincia");
     select.innerHTML = '<option value="">Seleccione...</option>';
     provs.forEach(p => select.innerHTML += `<option value="${p}">${p}</option>`);
@@ -139,7 +166,7 @@
   function cargarDistritos() {
     const dep = document.getElementById("departamento").value;
     const prov = document.getElementById("provincia").value;
-    const dists = [...new Set(dbUbigeo.filter(i => i[0] === dep && i[1] === prov).map(i => i[2]))].sort();
+    const dists = [...new Set(dbUbigeo.filter(i => i[0] === dep && i[1] === prov).map(i => i[2]))].filter(Boolean).sort();
     const select = document.getElementById("distrito");
     select.innerHTML = '<option value="">Seleccione...</option>';
     dists.forEach(d => select.innerHTML += `<option value="${d}">${d}</option>`);
@@ -179,7 +206,7 @@
       groupAgencia.style.display = "block";
       labelSede.innerText = "Sede de Agencia (Shalom):";
       
-      const sedesShalom = dbShalom.filter(s => s[2].trim().toUpperCase() === dist.trim().toUpperCase());
+      const sedesShalom = dbShalom.filter(s => s[2] && s[2].toString().trim().toUpperCase() === dist.trim().toUpperCase());
       
       if (sedesShalom.length > 0) {
         sedeSelect.style.display = "block";
@@ -198,7 +225,7 @@
       labelSede.innerText = "Sede / Dirección de Entrega:";
     }
 
-    // Lógica Referencia (Obligatorio en Delivery)
+    // Lógica Referencia (OBLIGATORIO si es Delivery)
     if (entrega.toLowerCase().includes("delivery")) {
       groupReferencia.style.display = "block";
       document.getElementById("referencia").required = true;
@@ -208,7 +235,7 @@
     }
   }
 
-  // Envío del Formulario
+  // Enviar el Registro
   document.getElementById("clientForm").onsubmit = async (e) => {
     e.preventDefault();
     const btn = document.getElementById("btnSubmit");
@@ -221,27 +248,35 @@
       : document.getElementById("direccionInput").value;
 
     const payload = {
-      documento: document.getElementById("documento").value,
-      celular: document.getElementById("celular").value,
-      nombres: document.getElementById("nombres").value,
-      departamento: document.getElementById("departamento").value,
-      provincia: document.getElementById("provincia").value,
-      distrito: document.getElementById("distrito").value,
-      tipoEntrega: entrega,
-      agencia: entrega === "Shalom-Recojo en Agencia" ? "SHALOM" : "",
-      sedeDireccion: sedeFinal,
-      referencia: document.getElementById("referencia").value
+      action: "saveClient",
+      data: {
+        documento: document.getElementById("documento").value,
+        celular: document.getElementById("celular").value,
+        nombres: document.getElementById("nombres").value,
+        departamento: document.getElementById("departamento").value,
+        provincia: document.getElementById("provincia").value,
+        distrito: document.getElementById("distrito").value,
+        tipoEntrega: entrega,
+        agencia: entrega === "Shalom-Recojo en Agencia" ? "SHALOM" : "",
+        sedeDireccion: sedeFinal,
+        referencia: document.getElementById("referencia").value
+      }
     };
 
-    await fetch(SCRIPT_URL, {
-      method: "POST",
-      body: JSON.stringify(payload)
-    });
-
-    alert("¡Registro guardado con éxito!");
-    document.getElementById("clientForm").reset();
-    btn.disabled = false;
-    btn.innerText = "Enviar Registro";
+    try {
+      await fetch(SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
+      alert("¡Registro guardado con éxito!");
+      document.getElementById("clientForm").reset();
+    } catch (err) {
+      alert("Error al guardar: " + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.innerText = "Enviar Registro";
+    }
   };
 </script>
 </body>
