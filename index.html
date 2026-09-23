@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Clientes</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f9; }
+    .container { max-width: 600px; margin: auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    h2 { text-align: center; color: #333; }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; font-weight: bold; }
+    input, select, textarea { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+    button { width: 100%; padding: 10px; background-color: #004d40; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
+    button:disabled { background-color: #ccc; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Formulario de Registro</h2>
+  <form id="clientForm">
+    
+    <!-- Tipo de Documento y Validación -->
+    <div class="form-group">
+      <label>Tipo de Documento:</label>
+      <select id="tipoDoc" onchange="actualizarLongitudDoc()">
+        <option value="DNI">DNI (8 dígitos)</option>
+        <option value="CE">Carnet de Extranjería (9 dígitos)</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label id="labelDoc">DNI / Carnet de Extranjería:</label>
+      <input type="text" id="documento" required maxlength="8" pattern="\d{8}" title="Debe ingresar exactamente la cantidad de números requeridos">
+    </div>
+
+    <div class="form-group">
+      <label>N° Celular (9 dígitos):</label>
+      <input type="text" id="celular" maxlength="9" pattern="\d{9}" required title="Debe ingresar exactamente 9 dígitos numericos">
+    </div>
+
+    <div class="form-group">
+      <label>Nombres y Apellidos:</label>
+      <input type="text" id="nombres" required>
+    </div>
+
+    <!-- Ubigeo -->
+    <div class="form-group">
+      <label>Departamento:</label>
+      <select id="departamento" onchange="cargarProvincias()" required><option value="">Seleccione...</option></select>
+    </div>
+
+    <div class="form-group">
+      <label>Provincia:</label>
+      <select id="provincia" onchange="cargarDistritos()" required><option value="">Seleccione...</option></select>
+    </div>
+
+    <div class="form-group">
+      <label>Distrito:</label>
+      <select id="distrito" onchange="evaluarTiposEntrega()" required><option value="">Seleccione...</option></select>
+    </div>
+
+    <!-- Tipo de Entrega -->
+    <div class="form-group">
+      <label>Tipo de Entrega:</label>
+      <select id="tipoEntrega" onchange="evaluarOpcionesEntrega()" required>
+        <option value="">Seleccione un distrito primero...</option>
+      </select>
+    </div>
+
+    <!-- Campos Condicionales -->
+    <div class="form-group" id="groupAgencia" style="display:none;">
+      <label>Agencia:</label>
+      <input type="text" id="agencia" readonly value="SHALOM">
+    </div>
+
+    <div class="form-group" id="groupSede">
+      <label id="labelSede">Sede / Dirección de Entrega:</label>
+      <select id="sedeSelect" style="display:none;"></select>
+      <input type="text" id="direccionInput" placeholder="Ingrese su dirección exacta">
+    </div>
+
+    <div class="form-group" id="groupReferencia" style="display:none;">
+      <label>Referencia:</label>
+      <textarea id="referencia" rows="2"></textarea>
+    </div>
+
+    <button type="submit" id="btnSubmit">Enviar Registro</button>
+  </form>
+</div>
+
+<script>
+  // Reemplaza con tu URL de Apps Script desplegado
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzgRnI7f7S6mrx2DrDzJeb47h1_hurDHlasjluuqLIhJB-EazDwJcidQSPq0sa0Ip2j/exec"; 
+
+  let dbUbigeo = [];
+  let dbShalom = [];
+
+  window.onload = async () => {
+    const resUbi = await fetch(`${SCRIPT_URL}?action=getUbigeo`);
+    dbUbigeo = await resUbi.json();
+
+    const resSha = await fetch(`${SCRIPT_URL}?action=getShalom`);
+    dbShalom = await resSha.json();
+
+    cargarDepartamentos();
+  };
+
+  function actualizarLongitudDoc() {
+    const tipo = document.getElementById("tipoDoc").value;
+    const input = document.getElementById("documento");
+    if (tipo === "DNI") {
+      input.maxLength = 8;
+      input.pattern = "\\d{8}";
+    } else {
+      input.maxLength = 9;
+      input.pattern = "\\d{9}";
+    }
+    input.value = "";
+  }
+
+  function cargarDepartamentos() {
+    const deps = [...new Set(dbUbigeo.map(item => item[0]))].sort();
+    const select = document.getElementById("departamento");
+    select.innerHTML = '<option value="">Seleccione...</option>';
+    deps.forEach(d => select.innerHTML += `<option value="${d}">${d}</option>`);
+  }
+
+  function cargarProvincias() {
+    const dep = document.getElementById("departamento").value;
+    const provs = [...new Set(dbUbigeo.filter(i => i[0] === dep).map(i => i[1]))].sort();
+    const select = document.getElementById("provincia");
+    select.innerHTML = '<option value="">Seleccione...</option>';
+    provs.forEach(p => select.innerHTML += `<option value="${p}">${p}</option>`);
+    document.getElementById("distrito").innerHTML = '<option value="">Seleccione...</option>';
+  }
+
+  function cargarDistritos() {
+    const dep = document.getElementById("departamento").value;
+    const prov = document.getElementById("provincia").value;
+    const dists = [...new Set(dbUbigeo.filter(i => i[0] === dep && i[1] === prov).map(i => i[2]))].sort();
+    const select = document.getElementById("distrito");
+    select.innerHTML = '<option value="">Seleccione...</option>';
+    dists.forEach(d => select.innerHTML += `<option value="${d}">${d}</option>`);
+  }
+
+  function evaluarTiposEntrega() {
+    const dist = document.getElementById("distrito").value.toUpperCase();
+    const selectEntrega = document.getElementById("tipoEntrega");
+    selectEntrega.innerHTML = '<option value="">Seleccione...</option>';
+
+    const opcionesBase = [
+      "Shalom-Recojo en Agencia",
+      "Olva Courier-Delivery",
+      "Olva Courier-Recojo en Local",
+      "Otros"
+    ];
+
+    if (dist === "CHIMBOTE" || dist === "NUEVO CHIMBOTE") {
+      opcionesBase.push("Mascotitas Felices-Recojo en Local", "Delivery");
+    }
+
+    opcionesBase.forEach(op => selectEntrega.innerHTML += `<option value="${op}">${op}</option>`);
+    evaluarOpcionesEntrega();
+  }
+
+  function evaluarOpcionesEntrega() {
+    const entrega = document.getElementById("tipoEntrega").value;
+    const dist = document.getElementById("distrito").value;
+    const groupAgencia = document.getElementById("groupAgencia");
+    const groupReferencia = document.getElementById("groupReferencia");
+    const sedeSelect = document.getElementById("sedeSelect");
+    const direccionInput = document.getElementById("direccionInput");
+    const labelSede = document.getElementById("labelSede");
+
+    // Lógica Shalom
+    if (entrega === "Shalom-Recojo en Agencia") {
+      groupAgencia.style.display = "block";
+      labelSede.innerText = "Sede de Agencia (Shalom):";
+      
+      const sedesShalom = dbShalom.filter(s => s[2].trim().toUpperCase() === dist.trim().toUpperCase());
+      
+      if (sedesShalom.length > 0) {
+        sedeSelect.style.display = "block";
+        direccionInput.style.display = "none";
+        sedeSelect.innerHTML = "";
+        sedesShalom.forEach(s => sedeSelect.innerHTML += `<option value="${s[3]}">${s[3]}</option>`);
+      } else {
+        sedeSelect.style.display = "none";
+        direccionInput.style.display = "block";
+        direccionInput.placeholder = "Sin coincidencia automática. Ingrese sede manualmente.";
+      }
+    } else {
+      groupAgencia.style.display = "none";
+      sedeSelect.style.display = "none";
+      direccionInput.style.display = "block";
+      labelSede.innerText = "Sede / Dirección de Entrega:";
+    }
+
+    // Lógica Referencia (Obligatorio en Delivery)
+    if (entrega.toLowerCase().includes("delivery")) {
+      groupReferencia.style.display = "block";
+      document.getElementById("referencia").required = true;
+    } else {
+      groupReferencia.style.display = "none";
+      document.getElementById("referencia").required = false;
+    }
+  }
+
+  // Envío del Formulario
+  document.getElementById("clientForm").onsubmit = async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById("btnSubmit");
+    btn.disabled = true;
+    btn.innerText = "Guardando...";
+
+    const entrega = document.getElementById("tipoEntrega").value;
+    const sedeFinal = (entrega === "Shalom-Recojo en Agencia" && document.getElementById("sedeSelect").style.display !== "none")
+      ? document.getElementById("sedeSelect").value
+      : document.getElementById("direccionInput").value;
+
+    const payload = {
+      documento: document.getElementById("documento").value,
+      celular: document.getElementById("celular").value,
+      nombres: document.getElementById("nombres").value,
+      departamento: document.getElementById("departamento").value,
+      provincia: document.getElementById("provincia").value,
+      distrito: document.getElementById("distrito").value,
+      tipoEntrega: entrega,
+      agencia: entrega === "Shalom-Recojo en Agencia" ? "SHALOM" : "",
+      sedeDireccion: sedeFinal,
+      referencia: document.getElementById("referencia").value
+    };
+
+    await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify(payload)
+    });
+
+    alert("¡Registro guardado con éxito!");
+    document.getElementById("clientForm").reset();
+    btn.disabled = false;
+    btn.innerText = "Enviar Registro";
+  };
+</script>
+</body>
+</html>
