@@ -35,28 +35,10 @@
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
     }
 
-    /* Encabezado y Logo */
-    .header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
+    .header { text-align: center; margin-bottom: 20px; }
+    .logo-img { max-width: 130px; height: auto; margin-bottom: 10px; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .header h1 { color: var(--primary-color); font-size: 26px; margin: 5px 0; font-weight: 700; }
 
-    .logo-img {
-      max-width: 140px;
-      height: auto;
-      margin-bottom: 10px;
-      border-radius: 50%;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-
-    .header h1 {
-      color: var(--primary-color);
-      font-size: 26px;
-      margin: 5px 0;
-      font-weight: 700;
-    }
-
-    /* Mensaje de Bienvenida */
     .welcome-banner {
       background-color: #e0f2f1;
       border-left: 5px solid var(--accent-color);
@@ -68,17 +50,8 @@
       line-height: 1.4;
     }
 
-    .form-group {
-      margin-bottom: 18px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 600;
-      font-size: 14px;
-      color: #444;
-    }
+    .form-group { margin-bottom: 18px; }
+    label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; color: #444; }
 
     input, select, textarea {
       width: 100%;
@@ -107,33 +80,17 @@
       font-size: 16px;
       font-weight: 700;
       cursor: pointer;
-      transition: background 0.3s ease, transform 0.1s ease;
+      transition: background 0.3s ease;
       margin-top: 10px;
     }
 
-    button:hover {
-      background-color: var(--primary-hover);
-    }
+    button:hover { background-color: var(--primary-hover); }
+    button:disabled { background-color: #b0bec5; cursor: not-allowed; }
 
-    button:active {
-      transform: scale(0.99);
-    }
-
-    button:disabled {
-      background-color: #b0bec5;
-      cursor: not-allowed;
-    }
-
-    /* Contenedor de Notificaciones Flotantes (Toast) */
-    #toast-container {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 9999;
-    }
-
+    /* Toast Flotante */
+    #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; }
     .toast {
-      min-width: 250px;
+      min-width: 260px;
       padding: 14px 20px;
       margin-bottom: 10px;
       border-radius: 8px;
@@ -145,84 +102,36 @@
       transform: translateY(-20px);
       transition: all 0.3s ease;
     }
-
-    .toast.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
+    .toast.show { opacity: 1; transform: translateY(0); }
     .toast.warning { background-color: #f57c00; }
     .toast.error { background-color: var(--error-color); }
-    .toast.success { background-color: var(--success-color); }
 
     /* Modal de Agradecimiento */
     .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 10000;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: center;
+      z-index: 10000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
     }
-
-    .modal-overlay.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
     .modal-card {
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      text-align: center;
-      max-width: 420px;
-      width: 90%;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      background: white; padding: 30px; border-radius: 12px; text-align: center;
+      max-width: 420px; width: 90%; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     }
-
-    .modal-card h3 {
-      color: var(--primary-color);
-      margin-top: 10px;
-      font-size: 22px;
-    }
-
-    .modal-card p {
-      color: #555;
-      font-size: 15px;
-      line-height: 1.5;
-      margin: 15px 0 20px 0;
-    }
-
-    .modal-btn {
-      background-color: var(--accent-color);
-      width: auto;
-      padding: 10px 30px;
-      display: inline-block;
-    }
-
-    .modal-btn:hover {
-      background-color: #00796b;
-    }
+    .modal-card h3 { color: var(--primary-color); font-size: 22px; margin-top: 10px; }
+    .modal-card p { color: #555; font-size: 15px; margin: 15px 0 20px 0; line-height: 1.5; }
+    .modal-btn { background-color: var(--accent-color); width: auto; padding: 10px 30px; display: inline-block; }
   </style>
 </head>
 <body>
 
-<!-- Notificaciones Flotantes -->
 <div id="toast-container"></div>
 
-<!-- Modal de Agradecimiento -->
+<!-- Modal Agradecimiento -->
 <div class="modal-overlay" id="thankYouModal">
   <div class="modal-card">
     <div style="font-size: 50px;">🐾</div>
     <h3>¡Muchas Gracias!</h3>
-    <p>Tu información de registro ha sido guardada con éxito en nuestro sistema. Nos pondremos en contacto contigo pronto.</p>
+    <p>Tu información de registro ha sido guardada con éxito en nuestro sistema.</p>
     <button class="modal-btn" onclick="cerrarModal()">Aceptar</button>
   </div>
 </div>
@@ -239,10 +148,10 @@
 
   <form id="clientForm">
     
-    <!-- Tipo de Documento -->
+    <!-- Tipo Doc -->
     <div class="form-group">
-      <label>Tipo de Documento:</label>
-      <select id="tipoDoc" onchange="actualizarLongitudDoc()">
+      <label>Tipo de Documento: *</label>
+      <select id="tipoDoc" onchange="actualizarLongitudDoc()" required>
         <option value="DNI">DNI (8 dígitos)</option>
         <option value="CE">Carnet de Extranjería (9 dígitos)</option>
       </select>
@@ -250,39 +159,39 @@
 
     <!-- Documento -->
     <div class="form-group">
-      <label id="labelDoc">DNI / Carnet de Extranjería:</label>
+      <label id="labelDoc">DNI / Carnet de Extranjería: *</label>
       <input type="text" id="documento" required maxlength="8" placeholder="Ingrese los números requeridos">
     </div>
 
     <!-- Celular -->
     <div class="form-group">
-      <label>N° Celular (9 dígitos):</label>
+      <label>N° Celular (9 dígitos): *</label>
       <input type="text" id="celular" maxlength="9" required placeholder="Ejm: 987654321">
     </div>
 
-    <!-- Nombres y Apellidos -->
+    <!-- Nombres -->
     <div class="form-group">
-      <label>Nombres y Apellidos:</label>
+      <label>Nombres y Apellidos: *</label>
       <input type="text" id="nombres" required placeholder="Nombres y Apellidos completos">
     </div>
 
     <!-- Ubigeo -->
     <div class="form-group">
-      <label>Departamento:</label>
+      <label>Departamento: *</label>
       <select id="departamento" onchange="cargarProvincias()" required>
         <option value="">Seleccione...</option>
       </select>
     </div>
 
     <div class="form-group">
-      <label>Provincia:</label>
+      <label>Provincia: *</label>
       <select id="provincia" onchange="cargarDistritos()" required>
         <option value="">Seleccione...</option>
       </select>
     </div>
 
     <div class="form-group">
-      <label>Distrito:</label>
+      <label>Distrito: *</label>
       <select id="distrito" onchange="evaluarTiposEntrega()" required>
         <option value="">Seleccione...</option>
       </select>
@@ -290,38 +199,39 @@
 
     <!-- Tipo de Entrega -->
     <div class="form-group">
-      <label>Tipo de Entrega:</label>
+      <label>Tipo de Entrega: *</label>
       <select id="tipoEntrega" onchange="evaluarOpcionesEntrega()" required>
         <option value="">Seleccione un distrito primero...</option>
       </select>
     </div>
 
-    <!-- Campos Condicionales -->
-    <div class="form-group" id="groupAgencia" style="display:none;">
-      <label>Agencia:</label>
-      <input type="text" id="agencia" readonly value="SHALOM">
+    <!-- Campo para Otra Agencia (Condicional) -->
+    <div class="form-group" id="groupOtraAgencia" style="display:none;">
+      <label>Nombre de la Agencia: *</label>
+      <input type="text" id="otraAgenciaInput" placeholder="Ejm: Marvisur, Flores, Civa, etc.">
     </div>
 
+    <!-- Dirección / Sede / Ubicación -->
     <div class="form-group" id="groupSede">
-      <label id="labelSede">Sede / Dirección de Entrega:</label>
+      <label id="labelSede">Sede / Dirección de Entrega: *</label>
       <select id="sedeSelect" style="display:none;"></select>
-      <input type="text" id="direccionInput" placeholder="Ingrese su dirección exacta">
+      <input type="text" id="direccionInput" required placeholder="Ingrese su dirección o ubicación exacta">
     </div>
 
-    <div class="form-group" id="groupReferencia" style="display:none;">
-      <label>Referencia:</label>
-      <textarea id="referencia" rows="2" placeholder="Puntos de referencia para la entrega"></textarea>
+    <!-- Referencia -->
+    <div class="form-group" id="groupReferencia">
+      <label id="labelReferencia">Referencia de Entrega: *</label>
+      <textarea id="referencia" rows="2" required placeholder="Puntos de referencia o indicaciones para la entrega"></textarea>
     </div>
 
     <button type="submit" id="btnSubmit">Enviar Registro</button>
   </form>
 </div>
 
-<!-- Datos de Ubigeo locales -->
+<!-- Datos Ubigeo -->
 <script src="ubigeo.js"></script>
 
 <script>
-  // ⚠️ ASEGÚRATE DE MANTENER AQUÍ TU URL DE GOOGLE APPS SCRIPT
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzgRnI7f7S6mrx2DrDzJeb47h1_hurDHlasjluuqLIhJB-EazDwJcidQSPq0sa0Ip2j/exec"; 
 
   let dbUbigeo = typeof DATA_UBIGEO !== 'undefined' ? DATA_UBIGEO : [];
@@ -330,8 +240,6 @@
   window.onload = async () => {
     if (dbUbigeo.length > 0) {
       cargarDepartamentos();
-    } else {
-      mostrarToast("No se pudo cargar el archivo local de ubigeo.js", "error");
     }
 
     try {
@@ -354,9 +262,7 @@
     const toast = document.createElement("div");
     toast.className = `toast ${tipo}`;
     toast.innerText = mensaje;
-    
     container.appendChild(toast);
-    
     setTimeout(() => toast.classList.add("show"), 100);
     setTimeout(() => {
       toast.classList.remove("show");
@@ -367,11 +273,7 @@
   function actualizarLongitudDoc() {
     const tipo = document.getElementById("tipoDoc").value;
     const input = document.getElementById("documento");
-    if (tipo === "DNI") {
-      input.maxLength = 8;
-    } else {
-      input.maxLength = 9;
-    }
+    input.maxLength = (tipo === "DNI") ? 8 : 9;
     input.value = "";
   }
 
@@ -428,42 +330,87 @@
   function evaluarOpcionesEntrega() {
     const entrega = document.getElementById("tipoEntrega").value;
     const dist = document.getElementById("distrito").value;
-    const groupAgencia = document.getElementById("groupAgencia");
-    const groupReferencia = document.getElementById("groupReferencia");
+    
+    const groupOtraAgencia = document.getElementById("groupOtraAgencia");
+    const otraAgenciaInput = document.getElementById("otraAgenciaInput");
+    const groupSede = document.getElementById("groupSede");
     const sedeSelect = document.getElementById("sedeSelect");
     const direccionInput = document.getElementById("direccionInput");
     const labelSede = document.getElementById("labelSede");
+    const groupReferencia = document.getElementById("groupReferencia");
+    const referencia = document.getElementById("referencia");
 
-    if (entrega === "Shalom-Recojo en Agencia") {
-      groupAgencia.style.display = "block";
-      labelSede.innerText = "Sede de Agencia (Shalom):";
+    // Reiniciar visibilidad
+    groupOtraAgencia.style.display = "none";
+    otraAgenciaInput.required = false;
+    groupSede.style.display = "block";
+    direccionInput.style.display = "block";
+    sedeSelect.style.display = "none";
+    sedeSelect.required = false;
+    direccionInput.required = true;
+    groupReferencia.style.display = "block";
+    referencia.required = true;
+
+    // 1. Recojo en Local (Mascotitas Felices)
+    if (entrega === "Mascotitas Felices-Recojo en Local") {
+      labelSede.innerText = "Sede de Recojo:";
+      direccionInput.value = "Local Principal - Mascotitas Felices";
+      direccionInput.readOnly = true;
+      referencia.value = "Recojo en Tienda";
+      referencia.readOnly = true;
+    } 
+    // 2. Delivery
+    else if (entrega === "Delivery") {
+      labelSede.innerText = "Dirección o Ubicación exacta de Entrega: *";
+      direccionInput.placeholder = "Solicitar dirección o ubicación exacta";
+      direccionInput.value = "";
+      direccionInput.readOnly = false;
+      referencia.placeholder = "Referencias de la vivienda o zona";
+      referencia.value = "";
+      referencia.readOnly = false;
+    }
+    // 3. Shalom Agencia
+    else if (entrega === "Shalom-Recojo en Agencia") {
+      labelSede.innerText = "Sede de Agencia (Shalom): *";
+      direccionInput.readOnly = false;
+      referencia.readOnly = false;
       
       const sedesShalom = dbShalom.filter(s => s[2] && s[2].toString().trim().toUpperCase() === dist.trim().toUpperCase());
-      
       if (sedesShalom.length > 0) {
         sedeSelect.style.display = "block";
         direccionInput.style.display = "none";
-        sedeSelect.innerHTML = "";
+        sedeSelect.required = true;
+        direccionInput.required = false;
+        sedeSelect.innerHTML = '<option value="">Seleccione Sede Shalom...</option>';
         sedesShalom.forEach(s => sedeSelect.innerHTML += `<option value="${s[3]}">${s[3]}</option>`);
       } else {
-        sedeSelect.style.display = "none";
-        direccionInput.style.display = "block";
-        direccionInput.placeholder = "Sin coincidencia automática. Ingrese sede manualmente.";
+        direccionInput.placeholder = "Ingrese nombre de la sede Shalom";
+        direccionInput.value = "";
       }
-    } else {
-      groupAgencia.style.display = "none";
-      sedeSelect.style.display = "none";
-      direccionInput.style.display = "block";
-      labelSede.innerText = "Sede / Dirección de Entrega:";
     }
-
-    if (entrega.toLowerCase().includes("delivery")) {
-      groupReferencia.style.display = "block";
-    } else {
-      groupReferencia.style.display = "none";
+    // 4. Olva Courier
+    else if (entrega.includes("Olva Courier")) {
+      labelSede.innerText = entrega.includes("Local") ? "Sede/Agencia Olva Courier: *" : "Dirección de Entrega Olva: *";
+      direccionInput.placeholder = "Ingrese dirección o agencia destino";
+      direccionInput.value = "";
+      direccionInput.readOnly = false;
+      referencia.value = "";
+      referencia.readOnly = false;
+    }
+    // 5. Otros
+    else if (entrega === "Otros") {
+      groupOtraAgencia.style.display = "block";
+      otraAgenciaInput.required = true;
+      labelSede.innerText = "Sede / Dirección de la Agencia Destino: *";
+      direccionInput.placeholder = "Ingrese la agencia o dirección de envío";
+      direccionInput.value = "";
+      direccionInput.readOnly = false;
+      referencia.value = "";
+      referencia.readOnly = false;
     }
   }
 
+  // Envío del Formulario
   document.getElementById("clientForm").onsubmit = async (e) => {
     e.preventDefault();
 
@@ -471,25 +418,52 @@
     const documento = document.getElementById("documento").value.trim();
     const celular = document.getElementById("celular").value.trim();
     const entrega = document.getElementById("tipoEntrega").value;
+    const nombres = document.getElementById("nombres").value.trim();
+    const departamento = document.getElementById("departamento").value;
+    const provincia = document.getElementById("provincia").value;
+    const distrito = document.getElementById("distrito").value;
     const referencia = document.getElementById("referencia").value.trim();
 
+    // Validaciones Estrictas
     if (tipoDoc === "DNI" && !/^\d{8}$/.test(documento)) {
-      mostrarToast("⚠️ El DNI debe contener exactamente 8 dígitos numéricos.", "warning");
+      mostrarToast("⚠️ El DNI debe tener exactamente 8 dígitos numéricos.", "warning");
       return;
     }
 
     if (tipoDoc === "CE" && !/^\d{9}$/.test(documento)) {
-      mostrarToast("⚠️ El Carnet de Extranjería debe contener exactamente 9 dígitos numéricos.", "warning");
+      mostrarToast("⚠️ El Carnet de Extranjería debe tener exactamente 9 dígitos numéricos.", "warning");
       return;
     }
 
     if (!/^\d{9}$/.test(celular)) {
-      mostrarToast("⚠️ El celular debe contener exactamente 9 dígitos numéricos.", "warning");
+      mostrarToast("⚠️ El celular debe tener exactamente 9 dígitos numéricos.", "warning");
       return;
     }
 
-    if (entrega.toLowerCase().includes("delivery") && referencia === "") {
-      mostrarToast("⚠️ La referencia es obligatoria para la opción de Delivery.", "warning");
+    // Determinar la Agencia
+    let agenciaFinal = "";
+    if (entrega === "Shalom-Recojo en Agencia") {
+      agenciaFinal = "SHALOM";
+    } else if (entrega.includes("Olva Courier")) {
+      agenciaFinal = "OLVA COURIER";
+    } else if (entrega === "Mascotitas Felices-Recojo en Local") {
+      agenciaFinal = "MASCOTITAS FELICES";
+    } else if (entrega === "Otros") {
+      agenciaFinal = document.getElementById("otraAgenciaInput").value.trim().toUpperCase();
+    } else {
+      agenciaFinal = "DELIVERY LOCAL";
+    }
+
+    // Determinar Sede / Dirección
+    let sedeFinal = "";
+    if (entrega === "Shalom-Recojo en Agencia" && document.getElementById("sedeSelect").style.display !== "none") {
+      sedeFinal = document.getElementById("sedeSelect").value;
+    } else {
+      sedeFinal = document.getElementById("direccionInput").value.trim();
+    }
+
+    if (!sedeFinal || !referencia) {
+      mostrarToast("⚠️ Todos los campos señalados son obligatorios.", "warning");
       return;
     }
 
@@ -497,21 +471,17 @@
     btn.disabled = true;
     btn.innerText = "Guardando registro...";
 
-    const sedeFinal = (entrega === "Shalom-Recojo en Agencia" && document.getElementById("sedeSelect").style.display !== "none")
-      ? document.getElementById("sedeSelect").value
-      : document.getElementById("direccionInput").value;
-
     const payload = {
       action: "saveClient",
       data: {
         documento: documento,
         celular: celular,
-        nombres: document.getElementById("nombres").value,
-        departamento: document.getElementById("departamento").value,
-        provincia: document.getElementById("provincia").value,
-        distrito: document.getElementById("distrito").value,
+        nombres: nombres,
+        departamento: departamento,
+        provincia: provincia,
+        distrito: distrito,
         tipoEntrega: entrega,
-        agencia: entrega === "Shalom-Recojo en Agencia" ? "SHALOM" : "",
+        agencia: agenciaFinal,
         sedeDireccion: sedeFinal,
         referencia: referencia
       }
